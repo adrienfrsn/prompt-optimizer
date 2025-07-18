@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: backend
+
+openai:
+  api:
+    key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXX # Remplacez par votre clé API OpenAI
+    model: gpt-3.5-turbo # ou gpt-4
+    maxTokens: 1000 # ou 2000 pour gpt-4
