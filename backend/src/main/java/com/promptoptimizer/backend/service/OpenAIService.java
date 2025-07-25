@@ -27,35 +27,34 @@ public class OpenAIService {
 
     public PromptResponse improvePrompt(String prompt, String model) {
         String systemPrompt = """
-                            Tu es un expert en prompt engineering.
+                    You are an expert in prompt engineering.
 
-                            1. Analyse le prompt utilisateur.
+                    1. Analyze the user's prompt.
 
-                            2. Si le prompt est clair et contient au moins ces informations : objectif, contexte, cible, contraintes précises, alors améliore-le et réponds uniquement par JSON :
-                            {
-                              "optimizedPrompt": "le prompt amélioré"
-                            }
+                    2. If the prompt is clear and includes at least the following information: objective, context, target, and specific constraints, then improve it and respond **only** in JSON format:
+                    {
+                      "optimizedPrompt": "the improved prompt"
+                    }
 
-                            3. Si le prompt est trop vague, incomplet, ou manque d’informations clés (par exemple, pas d’objectif clair, pas de contexte, pas de contraintes), alors réponds uniquement par JSON avec des questions à poser à l’utilisateur pour clarifier :
-                            {
-                              "questions": ["question 1", "question 2", "..."]
-                            }
+                    3. If the prompt is too vague, incomplete, or lacks key information (e.g., no clear objective, no context, no constraints), then respond **only** in JSON format with questions to ask the user for clarification:
+                    {
+                      "questions": ["question 1", "question 2", "..."]
+                    }
 
-                            4. Tu dois impérativement choisir l’un des deux cas, jamais les deux.
+                    4. You must choose **only one** of the two cases — never both.
 
-                            5. Ne réponds jamais avec du texte autre que ce JSON.
+                    5. Never respond with anything other than this JSON.
 
-                            6. Exemples :
+                    6. Examples:
 
-                            Input : "Programme d'entraînement" \s
-                            Output : {"questions": ["Pour quel niveau ?", "Combien de jours par semaine ?", "Avec quels équipements ?"]}
+                    Input: "Workout plan"
+                    Output: {"questions": ["For what fitness level?", "How many days per week?", "With what equipment?"]}
 
-                            Input : "Programme d'entraînement avancé 3 jours avec haltères" \s
-                            Output : {"optimizedPrompt": "Élabore un programme d'entraînement musculaire avancé sur 3 jours avec haltères en précisant les exercices, séries et répétitions."}
-
+                    Input: "Advanced 3-day workout plan with dumbbells"
+                    Output: {"optimizedPrompt": "Create an advanced 3-day strength training program using dumbbells, including exercises, sets, and reps."}
                 """;
 
-        String userPrompt = "Voici un prompt utilisateur à améliorer pour le modèle " + model + " : " + prompt;
+        String userPrompt = "Here is a user prompt to improve for the model " + model + ": " + prompt;
 
         String url = "https://api.openai.com/v1/chat/completions";
 

@@ -15,10 +15,10 @@ spring:
 
 openai:
   api:
-    key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXX # Remplacez par votre clé API OpenAI
-    model: gpt-3.5-turbo # ou gpt-4
-    maxTokens: 1000 # ou 2000 pour gpt-4
+    key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXX # replace by your OpenAI API key
+    model: gpt-3.5-turbo # or gpt-4
+    maxTokens: 1000 # or 2000 for gpt-4
 
 app:
   secret-key: your-secret
-  expiration-time: 86400
+  expiration-time: 86400000 # (in ms, 1 day)
