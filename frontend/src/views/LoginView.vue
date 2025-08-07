@@ -1,6 +1,8 @@
 <template>
-  <div class="min-h-screen bg-black text-white flex items-center justify-center p-6">
-    <div class="w-full max-w-md flex flex-col gap-4">
+  <div class="min-h-screen bg-black text-white">
+    <Header />
+    <div class="p-6 flex items-center justify-center">
+      <div class="w-full max-w-md flex flex-col gap-4">
       <h2 class="text-2xl font-semibold text-center">Login</h2>
 
       <div>
@@ -30,8 +32,16 @@
       >
         Login
       </button>
+
+      <div class="text-center mt-4">
+          <p class="text-neutral-400">
+            Don't have an account? 
+            <button class="text-white hover:underline" @click="goRegister">Register here</button>
+          </p>
+        </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -39,6 +49,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { showSuccess, showError } from '@/utils/toast'
+import Header from '@/components/Header.vue'
 
 const router = useRouter()
 
@@ -60,5 +71,9 @@ const login = async () => {
     console.error('Error during login:', error)
     showError('Error during login')
   }
+}
+
+const goRegister = () => {
+  router.push("/register");
 }
 </script>

@@ -2,9 +2,13 @@ package com.promptoptimizer.backend.controller;
 
 import com.promptoptimizer.backend.dto.PromptRequest;
 import com.promptoptimizer.backend.dto.PromptResponse;
+import com.promptoptimizer.backend.model.PromptHistory;
 import com.promptoptimizer.backend.service.OpenAIService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/prompt")
@@ -23,5 +27,11 @@ public class PromptController {
             throw new IllegalArgumentException("Model cannot be null or empty");
         }
         return openAIService.improvePrompt(request.getPrompt(), request.getModel());
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<?> getPromptHistory() {
+        List<PromptHistory> history = openAIService.getUserPromptHistory();
+        return ResponseEntity.ok(history);
     }
 }

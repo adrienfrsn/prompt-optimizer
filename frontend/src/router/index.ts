@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
-import PromptForm from '@/components/PromptForm.vue'
+import HomeView from '@/views/HomeView.vue'
+import HistoryView from '@/views/HistoryView.vue'
 import { jwtDecode } from 'jwt-decode';
 
 const isTokenValid = (token: string | null): boolean => {
@@ -20,7 +21,8 @@ const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: LoginView },
   { path: '/register', component: RegisterView },
-  { path: '/app', component: PromptForm, meta: { requiresAuth: true } },
+  { path: '/history', component: HistoryView, meta: { requiresAuth: true } },
+  { path: '/app', component: HomeView, meta: { requiresAuth: true } },
 ]
 
 const router = createRouter({

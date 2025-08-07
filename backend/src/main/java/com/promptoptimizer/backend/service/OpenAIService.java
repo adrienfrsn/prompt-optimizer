@@ -2,11 +2,20 @@ package com.promptoptimizer.backend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.promptoptimizer.backend.dto.PromptResponse;
+import com.promptoptimizer.backend.model.PromptHistory;
+import com.promptoptimizer.backend.model.User;
+import com.promptoptimizer.backend.repository.UserRepository;
+import com.promptoptimizer.backend.repository.PromptHistoryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,6 +33,14 @@ public class OpenAIService {
 
     @Value("${openai.api.maxTokens}")
     private int apiMaxTokens;
+
+    @Autowired
+    private PromptHistoryRepository promptHistoryRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private final static Logger log = LoggerFactory.getLogger(OpenAIService.class);
 
     public PromptResponse improvePrompt(String prompt, String model) {
         String systemPrompt = """
@@ -84,6 +101,7 @@ public class OpenAIService {
             PromptResponse promptResponse;
             try {
                 promptResponse = objectMapper.readValue(jsonResponse, PromptResponse.class);
+                savePromptHistory(prompt, model, promptResponse);
             } catch (Exception e) {
                 e.printStackTrace();
                 promptResponse = new PromptResponse();
@@ -97,4 +115,41 @@ public class OpenAIService {
         }
     }
 
+    private void savePromptHistory(String originalPrompt, String model, PromptResponse promptResponse) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                String username = authentication.getName();
+                User user = userRepository.findByUsername(username);
+
+                if (user != null) {
+                    String responseToSave = "";
+                    if (promptResponse.getOptimizedPrompt() != null) {
+                        responseToSave = promptResponse.getOptimizedPrompt();
+                    } else if (promptResponse.getQuestions() != null) {
+                        responseToSave = String.join(", ", promptResponse.getQuestions());
+                    }
+
+                    PromptHistory history = new PromptHistory(user, originalPrompt, model, responseToSave);
+                    promptHistoryRepository.save(history);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<PromptHistory> getUserPromptHistory() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            log.info("username: " + username);
+            User user = userRepository.findByUsername(username);
+
+            if (user != null) {
+                return promptHistoryRepository.findByUserOrderByTimestampDesc(user);
+            }
+        }
+        return List.of();
+    }
 }
