@@ -1,84 +1,95 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="flex items-center justify-center min-h-screen p-4">
-      <div class="w-full max-w-md flex flex-col gap-4">
-        <h2 class="text-2xl font-semibold text-center text-white mb-6">
-          Improve your prompt
-        </h2>
+  <div class="container-page py-8">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="section-title">Improve your prompt</h2>
 
-        <textarea 
-          v-model="prompt" 
-          placeholder="Your prompt here..." 
-          rows="6"
-          class="bg-neutral-900 border border-neutral-700 rounded-lg px-3 py-2 w-full text-white resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        ></textarea>
+        <div class="space-y-4">
+          <textarea 
+            v-model="prompt" 
+            placeholder="Your prompt here..." 
+            rows="6"
+            class="textarea"
+          ></textarea>
 
-        <select 
-          v-model="model"
-          class="bg-neutral-900 border border-neutral-700 rounded-lg px-3 py-2 w-full text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="" disabled selected>Choose a model</option>
-          <option value="gpt-3.5">GPT-3.5</option>
-          <option value="gpt-4">GPT-4</option>
-          <option value="claude-3">Claude 3</option>
-          <option value="claude-4">Claude 4</option>
-          <option value="gemini-flash">Gemini Flash</option>
-          <option value="gemini-pro">Gemini Pro</option>
-          <option value="mistral">Mistral</option>
-          <option value="llama-3">LLaMA 3</option>
-        </select>
-
-        <div v-if="questions.length" class="mt-4">
-          <h3 class="text-lg font-medium mb-3 text-white">
-            The model needs clarification:
-          </h3>
-          <div v-for="(question, index) in questions" :key="index" class="mb-4">
-            <label class="block mb-2 text-white font-medium">
-              {{ question }}
-            </label>
-            <input 
-              v-model="answers[index]"
-              type="text"
-              class="bg-neutral-800 border border-neutral-600 rounded-lg px-3 py-2 w-full text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+          <div class="with-icon">
+            <select 
+              v-model="model"
+              class="select"
+            >
+              <option value="" disabled selected>Choose a model</option>
+              <option value="gpt-5">GPT-5</option>
+              <option value="gpt-3.5">GPT-3.5</option>
+              <option value="gpt-4">GPT-4</option>
+              <option value="claude-3">Claude 3</option>
+              <option value="claude-4">Claude 4</option>
+              <option value="gemini-flash">Gemini Flash</option>
+              <option value="gemini-pro">Gemini Pro</option>
+              <option value="mistral">Mistral</option>
+              <option value="llama-3">LLaMA 3</option>
+            </select>
+            <svg class="icon-right w-5 h-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" />
+            </svg>
           </div>
-        </div>
 
-        <button 
-          @click="submitPrompt" 
-          :disabled="!prompt || !model || (questions.length > 0 && answers.some(a => !a.trim())) || isLoading"
-          class="border border-white text-white py-3 px-6 rounded-lg hover:bg-white hover:text-black transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed font-medium flex items-center justify-center space-x-2"
-        >
-          <svg
-            v-if="isLoading"
-            class="animate-spin h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-              class="opacity-25"
-            />
-            <path
-              fill="currentColor"
-              d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              class="opacity-75"
-            />
-          </svg>
-          <span>
-            {{ isLoading ? 'Processing...' : (questions.length ? 'Send informations' : 'Improve') }}
-          </span>
-        </button>
+          <div v-if="questions.length" class="mt-2">
+            <h3 class="text-lg font-medium mb-3">The model needs clarification:</h3>
+            <div v-for="(question, index) in questions" :key="index" class="mb-4">
+              <label class="label">{{ question }}</label>
+              <input 
+                v-model="answers[index]"
+                type="text"
+                class="input"
+              />
+            </div>
+          </div>
 
-        <div v-if="optimizedPrompt" class="mt-6">
-          <h3 class="text-lg font-medium mb-3 text-white">
-            Optimized prompt:
-          </h3>
-          <pre class="bg-neutral-900 border border-neutral-700 rounded-lg px-4 py-3 whitespace-pre-wrap text-white overflow-x-auto">{{ optimizedPrompt }}</pre>
+          <div class="flex items-center gap-3">
+            <button 
+              @click="submitPrompt" 
+              :disabled="!prompt || !model || (questions.length > 0 && answers.some(a => !a.trim())) || isLoading"
+              class="btn btn-primary"
+            >
+              <svg
+                v-if="isLoading"
+                class="animate-spin h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                  class="opacity-25"
+                />
+                <path
+                  fill="currentColor"
+                  d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  class="opacity-75"
+                />
+              </svg>
+              <svg v-else class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M8 16l8-8m-5 0l1-3 3-1-1 3-3 1z" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>
+                {{ isLoading ? 'Processing...' : (questions.length ? 'Send informations' : 'Improve') }}
+              </span>
+            </button>
+
+            <button
+              v-if="optimizedPrompt"
+              class="btn btn-ghost"
+              @click="copyOptimized"
+            >Copy optimized</button>
+          </div>
+
+          <div v-if="optimizedPrompt" class="mt-6">
+            <h3 class="text-lg font-medium mb-3">Optimized prompt:</h3>
+            <pre class="prose-pre card p-4 overflow-x-auto">{{ optimizedPrompt }}</pre>
+          </div>
         </div>
       </div>
     </div>
@@ -88,9 +99,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
-import { useRouter } from 'vue-router'
+import { showSuccess } from '@/utils/toast'
 
-const router = useRouter()
 
 const prompt = ref<string>('')
 const model = ref<string>('')
@@ -99,9 +109,13 @@ const questions = ref<string[]>([])
 const answers = ref<string[]>([])
 const isLoading = ref<boolean>(false)
 
-const logout = () => {
-  localStorage.removeItem('token')
-  router.push('/login')
+const copyOptimized = async () => {
+  try {
+    await navigator.clipboard.writeText(optimizedPrompt.value)
+    showSuccess('Prompt copied to clipboard!')
+  } catch (e) {
+    console.error('Copy failed', e)
+  }
 }
 
 const submitPrompt = async () => {

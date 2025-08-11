@@ -2,52 +2,56 @@
   <div class="min-h-screen bg-black text-white">
     <Header />
     <div class="p-6 flex items-center justify-center">
-      <div class="w-full max-w-md flex flex-col gap-4">
-        <h2 class="text-2xl font-semibold text-center">Register</h2>
+      <div class="w-full max-w-md">
+        <div class="card">
+          <div class="card-body flex flex-col gap-4">
+            <h2 class="text-2xl font-semibold text-center">Register</h2>
 
-        <div>
-          <label for="username" class="block mb-1">Username:</label>
-          <input 
-            type="text" 
-            id="username" 
-            v-model="username" 
-            class="bg-neutral-900 border border-neutral-700 rounded px-3 py-2 w-full text-white focus:outline-none"
-          />
-        </div>
+            <div>
+              <label for="username" class="label">Username</label>
+              <input 
+                type="text" 
+                id="username" 
+                v-model="username" 
+                class="input"
+              />
+            </div>
 
-        <div>
-          <label for="email" class="block mb-1">Email:</label>
-          <input 
-            type="email" 
-            id="email" 
-            v-model="email" 
-            class="bg-neutral-900 border border-neutral-700 rounded px-3 py-2 w-full text-white focus:outline-none"
-          />
-        </div>
+            <div>
+              <label for="email" class="label">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                v-model="email" 
+                class="input"
+              />
+            </div>
 
-        <div>
-          <label for="password" class="block mb-1">Password:</label>
-          <input 
-            type="password" 
-            id="password" 
-            v-model="password" 
-            class="bg-neutral-900 border border-neutral-700 rounded px-3 py-2 w-full text-white focus:outline-none"
-          />
-        </div>
+            <div>
+              <label for="password" class="label">Password</label>
+              <input 
+                type="password" 
+                id="password" 
+                v-model="password" 
+                class="input"
+              />
+            </div>
 
-        <button 
-          @click="register"
-          :disabled="!username || !password"
-          class="border border-white text-white py-2 px-4 rounded hover:bg-white hover:text-black transition disabled:opacity-40"
-        >
-          Register
-        </button>
+            <button 
+              @click="register"
+              :disabled="!username || !password"
+              class="btn-outline"
+            >
+              Register
+            </button>
 
-        <div class="text-center mt-4">
-          <p class="text-neutral-400">
-            Already have an account? 
-            <button class="text-white hover:underline" @click="goLogin">Login here</button>
-          </p>
+            <div class="text-center mt-4">
+              <p class="text-neutral-400">
+                Already have an account? 
+                <button class="text-white hover:underline" @click="goLogin">Login here</button>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -83,7 +87,11 @@ const register = async () => {
     }
   } catch (error) {
     console.error('Error during registration:', error)
-    showError('Error during registration')
+    if (axios.isAxiosError(error) && error.response) {
+      showError(error.response.data)
+    } else {
+      showError('Error during registration')
+    }
   }
 }
 

@@ -2,9 +2,9 @@ spring:
   application:
     name: backend
   datasource:
-    url: your-database-url
-    username: your-database-username
-    password: your-database-password
+    url: your-database-url # jdbc:postgresql://localhost:5432/po_db
+    username: your-database-username # postgres
+    password: your-database-password # postgres
   jpa:
     hibernate:
       ddl-auto: update

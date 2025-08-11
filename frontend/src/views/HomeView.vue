@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-black text-white">
+  <div>
     <Header />
-    <div class="p-6">
+    <div class="py-6">
       <PromptForm />
     </div>
   </div>

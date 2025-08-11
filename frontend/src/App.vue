@@ -3,7 +3,9 @@ import './styles.css'
 </script>
 
 <template>
-  <main>
-    <router-view />
-  </main>
+  <div>
+    <main>
+      <router-view />
+    </main>
+  </div>
 </template>

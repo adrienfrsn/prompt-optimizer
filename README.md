@@ -10,6 +10,8 @@ This project was created to get hands-on experience with Vue.js and Spring Boot,
 - Analyze user prompts to check if they're clear enough
 - Automatically optimize prompts based on the selected model (GPT-3.5, GPT-4, Claude 3, Gemini…)
 - Generate clarifying questions when needed
+- View prompt history
+- One‑click copy for prompts and results
 - Frontend built with Vue.js + Tailwind CSS
 - Backend using Spring Boot (Java) + OpenAI API
 - User registration and login system
@@ -34,10 +36,30 @@ This project was created to get hands-on experience with Vue.js and Spring Boot,
 ### Backend
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [OpenAI API](https://platform.openai.com/docs)
+- [PostgreSQL](https://www.postgresql.org/)
 
 ---
 
 ## Setup & Configuration
+
+### Database (PostgreSQL)
+
+A Docker Compose file is provided to run Postgres locally.
+
+Start Postgres:
+
+```bash
+docker compose up -d
+```
+
+Default connection details:
+- Host: localhost
+- Port: 5432
+- Database: po_db
+- User: postgres
+- Password: postgres
+
+Update your Spring Boot configuration (application.yml) to match these values if needed.
 
 ### Backend
 
@@ -54,7 +76,7 @@ cd prompt-optimizer/backend
 cp src/main/resources/application.yml.example src/main/resources/application.yml
 ```
 
-Then edit application.yml to include your database details and OpenAI API key.
+Then edit application.yml to include your database details (see above) and OpenAI API key.
 
 3. Run the backend:
 
@@ -90,6 +112,6 @@ The app should be accessible at http://localhost:5173 (or another Vite port)
 
 ## TODO / Upcoming Improvements
 
-- Prompt history
-- Improved UI with animations
+- Improve OpenAI API call
+- User settings
 - Deployment
