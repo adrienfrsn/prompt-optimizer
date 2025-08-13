@@ -16,8 +16,9 @@ spring:
 openai:
   api:
     key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXX # replace by your OpenAI API key
-    model: gpt-3.5-turbo # or gpt-4
-    maxTokens: 1000 # or 2000 for gpt-4
+    smallModel: gpt-4o-mini
+    largeModel: gpt-4o
+    maxTokens: 6000
 
 app:
   secret-key: your-secret
