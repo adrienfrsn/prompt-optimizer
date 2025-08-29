@@ -86,6 +86,34 @@
             >Copy optimized</button>
           </div>
 
+          <div v-if="baseScore !== null || optimizedScore !== null" class="mt-6">
+            <h3 class="text-lg font-medium mb-3">Scores</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="flex justify-between text-sm mb-2">
+                    <span>Base prompt</span>
+                    <span>{{ (baseScore ?? 0) }}/100</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded h-2">
+                    <div class="bg-blue-500 h-2 rounded" :style="{ width: ((baseScore ?? 0)) + '%' }"></div>
+                  </div>
+                </div>
+              </div>
+              <div v-if="optimizedScore !== null" class="card">
+                <div class="card-body">
+                  <div class="flex justify-between text-sm mb-2">
+                    <span>Optimized prompt</span>
+                    <span>{{ optimizedScore }}/100</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded h-2">
+                    <div class="bg-green-500 h-2 rounded" :style="{ width: optimizedScore + '%' }"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div v-if="optimizedPrompt" class="mt-6">
             <h3 class="text-lg font-medium mb-3">Optimized prompt:</h3>
             <pre class="prose-pre card p-4 overflow-x-auto">{{ optimizedPrompt }}</pre>
@@ -109,6 +137,9 @@ const questions = ref<string[]>([])
 const answers = ref<string[]>([])
 const isLoading = ref<boolean>(false)
 
+const baseScore = ref<number | null>(null)
+const optimizedScore = ref<number | null>(null)
+
 const copyOptimized = async () => {
   try {
     await navigator.clipboard.writeText(optimizedPrompt.value)
@@ -121,6 +152,8 @@ const copyOptimized = async () => {
 const submitPrompt = async () => {
   try {
     isLoading.value = true
+    baseScore.value = null
+    optimizedScore.value = null
 
     const response = await axios.post(
       'http://localhost:8080/api/prompt/improve',
@@ -141,6 +174,13 @@ const submitPrompt = async () => {
     optimizedPrompt.value = ''
     questions.value = []
     answers.value = []
+
+    if (typeof response.data?.baseScore === 'number') {
+      baseScore.value = Math.max(0, Math.min(100, response.data.baseScore))
+    }
+    if (typeof response.data?.optimizedScore === 'number') {
+      optimizedScore.value = Math.max(0, Math.min(100, response.data.optimizedScore))
+    }
 
     if (response.data.optimizedPrompt) {
       optimizedPrompt.value = response.data.optimizedPrompt

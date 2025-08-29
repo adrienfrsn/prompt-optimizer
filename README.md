@@ -12,7 +12,7 @@ This project was created to get hands-on experience with Vue.js and Spring Boot,
 - Generate clarifying questions when needed
 - View prompt history
 - One‑click copy for prompts and results
-- Frontend built with Vue.js + Tailwind CSS
+- Frontend built with Next.js + Tailwind CSS
 - Backend using Spring Boot (Java) + OpenAI API
 - User registration and login system
 
@@ -29,7 +29,7 @@ This project was created to get hands-on experience with Vue.js and Spring Boot,
 ## Tech Stack
 
 ### Frontend
-- [Vue.js 3](https://vuejs.org/)
+- [Next.js](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Axios](https://axios-http.com/)
 
@@ -91,7 +91,7 @@ By default, the backend runs on http://localhost:8080
 1. Go to the frontend directory:
 
 ```bash
-cd ../frontend
+cd ../frontendv2
 ```
 
 2. Install dependencies:
@@ -106,12 +106,13 @@ npm install
 npm run dev
 ```
 
-The app should be accessible at http://localhost:5173 (or another Vite port)
+The app should be accessible at http://localhost:3000
 
 ---
 
 ## TODO / Upcoming Improvements
 
-- Improve OpenAI API call
+- Edit final prompt
+- Execute prompt
 - User settings
 - Deployment

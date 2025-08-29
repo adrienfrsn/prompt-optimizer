@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/prompt")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PromptController {
 
     @Autowired
@@ -33,5 +33,11 @@ public class PromptController {
     public ResponseEntity<?> getPromptHistory() {
         List<PromptHistory> history = openAIService.getUserPromptHistory();
         return ResponseEntity.ok(history);
+    }
+
+    @DeleteMapping("/history")
+    public ResponseEntity<?> deletePromptHistory(@RequestBody List<Long> ids) {
+        openAIService.deletePromptHistory(ids);
+        return ResponseEntity.ok().build();
     }
 }

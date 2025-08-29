@@ -14,6 +14,7 @@ public class PromptHistory {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(columnDefinition = "TEXT")
@@ -25,6 +26,12 @@ public class PromptHistory {
     private String optimizedPrompt;
 
     private LocalDateTime timestamp;
+
+    @Column
+    private Integer baseScore;
+
+    @Column
+    private Integer optimizedScore;
 
     public PromptHistory() {}
 
